@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DigitalConnectPlus.Server/DigitalConnectPlus.Server.csproj" />
+    <Project Path="src/DigitalConnectPlus.Setup/DigitalConnectPlus.Setup.csproj" />
+    <Project Path="src/DigitalConnectPlus.Tray/DigitalConnectPlus.Tray.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/DigitalConnectPlus.Tests/DigitalConnectPlus.Tests.csproj" />
+  </Folder>
+</Solution>

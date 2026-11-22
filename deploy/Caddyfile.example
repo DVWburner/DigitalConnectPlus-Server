@@ -1,0 +1,19 @@
+# Caddyfile Example for Digital Connect+ Server
+# Replace <YOUR_DOMAIN> with the domain you purchased!
+
+<YOUR_DOMAIN> {
+    tls {
+        # CRITICAL for Gen5W Android 4.4.2 KitKat head unit compatibility:
+        protocols tls1.2 tls1.3
+        curves x25519 secp256r1 secp384r1
+        ciphers TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256 TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384 TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256 TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA
+    }
+
+    request_body {
+        max_size 256KB
+    }
+
+    reverse_proxy 127.0.0.1:8443 {
+        flush_interval -1
+    }
+}

@@ -1,0 +1,9 @@
+bin/
+obj/
+dist/
+src/DigitalConnectPlus.Setup/payload.zip
+*.db
+*.db-wal
+*.db-shm
+.vs/
+.env
