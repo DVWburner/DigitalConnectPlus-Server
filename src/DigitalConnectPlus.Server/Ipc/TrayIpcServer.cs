@@ -87,8 +87,7 @@ public sealed class TrayIpcServer : BackgroundService
             {
                 pipe = CreateSecuredPipeServer();
                 await pipe.WaitForConnectionAsync(stoppingToken);
-                bool callerIsAdmin = CheckCallerIsAdmin(pipe);
-                _ = HandleClientConnectionAsync(pipe, callerIsAdmin, stoppingToken);
+                _ = HandleClientConnectionAsync(pipe, stoppingToken);
                 pipe = null; // Ownership transferred
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
@@ -154,7 +153,7 @@ public sealed class TrayIpcServer : BackgroundService
         return isAdmin;
     }
 
-    private async Task HandleClientConnectionAsync(NamedPipeServerStream pipe, bool callerIsAdmin, CancellationToken ct)
+    private async Task HandleClientConnectionAsync(NamedPipeServerStream pipe, CancellationToken ct)
     {
         await using (pipe)
         {
@@ -166,6 +165,9 @@ public sealed class TrayIpcServer : BackgroundService
                 string? line = await reader.ReadLineAsync(ct);
                 if (string.IsNullOrWhiteSpace(line) || line.Length > 131_072)
                     return;
+
+                // Windows requires at least one read from the named pipe before ImpersonateNamedPipeClient (RunAsClient) succeeds.
+                bool callerIsAdmin = OperatingSystem.IsWindows() && CheckCallerIsAdmin(pipe);
 
                 IpcCommandMessage? cmd = JsonSerializer.Deserialize<IpcCommandMessage>(line, JsonOpts);
                 if (cmd == null)

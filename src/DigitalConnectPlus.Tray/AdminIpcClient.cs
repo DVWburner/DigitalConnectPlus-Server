@@ -159,7 +159,12 @@ internal static class AdminIpcClient
     {
         try
         {
-            await using var pipe = new NamedPipeClientStream(".", PipeName, PipeDirection.InOut, PipeOptions.Asynchronous);
+            await using var pipe = new NamedPipeClientStream(
+                ".",
+                PipeName,
+                PipeDirection.InOut,
+                PipeOptions.Asynchronous,
+                TokenImpersonationLevel.Impersonation);
             using var cts = new CancellationTokenSource(timeoutMs);
             await pipe.ConnectAsync(cts.Token);
 
